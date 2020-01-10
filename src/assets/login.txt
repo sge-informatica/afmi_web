@@ -1,0 +1,20 @@
+{
+  "username": "Leandro Oliveira Martins",
+  "email": "leandro@sgeinformatica.com.br",
+  "password": "$2a$10$a0DueHIT140CLQQ9ZoTQxenW.Fi8qMYytIeyIdCcjOIz/eYBvuxem",
+  "created_at": "2020-01-03 15:44:40",
+  "updated_at": "2020-01-03 15:44:40",
+  "id": 3,
+  "profile": {
+    "id": 3132,
+    "matricula": 999002,
+    "nomecompleto": "Leandro Martins - SGE",
+    "datanascimento": "1996-05-06T03:00:00.000Z",
+    "cnpj_cpf": "44050059827",
+    "admin": false,
+    "user_id": 3,
+    "created_at": "2020-01-03 09:31:48",
+    "updated_at": "2020-01-03 12:44:40",
+    "provider": false
+  }
+}

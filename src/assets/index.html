@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Exemplo de botões dinâmicos</title>
+  </head>
+  <body>
+    <div id="api">
+      <ul></ul>
+      <select id="cboProfiles">
+        <option value="3">Admin</option>
+        <option value="2">Provider</option>
+        <option value="1">Usuário</option>
+      </select>
+      <button>Aplicar</button>
+    </div>
+  </body>
+  <style>
+    button:hover {
+      opacity: 70%;
+    }
+  </style>
+  <script>
+    var listElement = document.querySelector("#api ul");
+    var inputElement = document.querySelector("#api input");
+    var buttonElement = document.querySelector("#api button");
+    var selectElement = document.getElementById("cboProfiles");
+    listElement.setAttribute("style", "list-style-type: none");
+
+    var todos = [
+      "Consultar compras",
+      "Vender",
+      "Cancelar Venda",
+      "Incluir profiles",
+      "Alterar profiles",
+      "Alterar transação",
+      "Eleger Admins"
+    ];
+    var attrs = ["1", "2", "2", "3", "3", "3", "3"];
+
+    function renderMenu() {
+      listElement.innerHTML = "";
+      for (todo of todos) {
+        var buttonElement = document.createElement("button");
+        buttonElement.setAttribute(
+          "style",
+          "width: 150px; height: 40px; margin-top: 5px; margin-left: 5px; margin-right: 5px; background: linear-gradient(to bottom, #abd5aa 5%, #68b465 100%); text-shadow: 0px 1px 0px #528009; border-radius: 10px;font-family: Fira Code"
+        );
+
+        var todoElement = document.createElement("li");
+        var todoText = document.createTextNode(todo);
+        var index = todos.indexOf(todo);
+
+        attrs[index] <= selectElement.value
+          ? buttonElement.appendChild(todoText)
+          : null;
+        attrs[index] <= selectElement.value
+          ? todoElement.appendChild(buttonElement)
+          : null;
+        attrs[index] <= selectElement.value
+          ? listElement.appendChild(todoElement)
+          : null;
+      }
+    }
+    buttonElement.onclick = renderMenu;
+  </script>
+</html>
