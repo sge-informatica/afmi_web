@@ -11,8 +11,8 @@ export function* updateProfile({ payload }) {
       { id, token, username },
       rest.old_password ? rest : {}
     );
-    const response = yield call(api.put, `users/${id}`, profile);
-    toast.success(response.data.ok);
+    yield call(api.put, `users/${id}`, profile);
+    toast.success("Dados atualizados com sucesso!");
 
     const setProfile = {
       id: payload.data.id,
@@ -21,8 +21,8 @@ export function* updateProfile({ payload }) {
         id: payload.data.profile.profile.id,
         matricula: payload.data.profile.profile.matricula,
         cnpj_cpf: payload.data.profile.profile.cnpj_cpf,
-        admin: true,
-        provider: true
+        admin: payload.data.profile.profile.admin,
+        provider: payload.data.profile.profile.provider
       }
     };
 

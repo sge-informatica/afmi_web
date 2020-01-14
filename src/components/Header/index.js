@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { Container, Content, Profile } from "./styles";
+import { Container, Content, Profile, Text } from "./styles";
 
 export default function Header() {
   const profile = useSelector(state => state.user.profile);
@@ -13,7 +13,7 @@ export default function Header() {
       ? setType("Administrador")
       : profile.profile.provider
       ? setType("Prestador de serviços")
-      : setType("Consumer");
+      : setType("Consumidor");
   }, [profile]);
 
   return (
@@ -28,7 +28,7 @@ export default function Header() {
           <Profile>
             <div>
               <strong>{profile.username}</strong>
-              <text>{type}</text>
+              <Text>{type}</Text>
               <Link to="/profile">Meu perfil</Link>
             </div>
           </Profile>

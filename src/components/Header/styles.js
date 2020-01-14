@@ -6,6 +6,13 @@ export const Container = styled.div`
   padding: 0 30px;
 `;
 
+export const Text = styled.text`
+  margin-top: 2px;
+  display: block;
+  font-size: 12px;
+  color: #888;
+`;
+
 export const Content = styled.div`
   height: 64px;
   max-width: 1350px;
@@ -28,6 +35,11 @@ export const Content = styled.div`
     a {
       font-weight: bold;
       color: #595959;
+      transition: color, 0.3s;
+
+      &:hover {
+        color: ${darken(0.1, "#444")};
+      }
     }
   }
 
@@ -52,20 +64,13 @@ export const Profile = styled.div`
       color: #333;
     }
 
-    text {
-      margin-top: 2px;
-      display: block;
-      font-size: 12px;
-      color: #888;
-    }
-
     a {
       font-size: 12px;
-      color: #999;
+      color: #555;
       transition: color 0.2s;
 
       &:hover {
-        color: ${darken(0.1, "#999")};
+        color: ${darken(0.1, "#111")};
       }
     }
   }

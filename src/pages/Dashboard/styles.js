@@ -17,7 +17,9 @@ export const Container = styled.div`
       grid-gap: 30px;
       margin-top: 15px;
 
-      button {
+      a {
+        padding-top: 8px;
+        text-align: center;
         height: 80px;
         width: 250px;
         background: #595959;
