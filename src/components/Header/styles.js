@@ -66,11 +66,12 @@ export const Profile = styled.div`
 
     a {
       font-size: 12px;
-      color: #555;
+      font-weight: bold;
+      color: #3b4e33;
       transition: color 0.2s;
 
       &:hover {
-        color: ${darken(0.1, "#111")};
+        color: ${darken(0.1, "#3B4E33")};
       }
     }
   }

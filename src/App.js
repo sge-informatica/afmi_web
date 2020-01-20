@@ -11,7 +11,7 @@ import GlobalStyle from "./styles/global";
 
 function App() {
   useEffect(() => {
-    document.title = "AfmiApp";
+    document.title = "Sistema de convênios AFMI";
   }, []);
 
   return (

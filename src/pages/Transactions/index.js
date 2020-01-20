@@ -61,6 +61,7 @@ export default function Transactions() {
       setLoading(false);
     } catch (err) {
       toast.error("Sessão inválida, faça login na aplicação novamente.");
+      setLoading(false);
     }
   }
 
@@ -77,6 +78,7 @@ export default function Transactions() {
       setLoading(false);
     } catch (err) {
       toast.error("Sessão inválida, faça login na aplicação novamente.");
+      setLoading(false);
     }
   }
 
@@ -85,7 +87,7 @@ export default function Transactions() {
       <Container>
         {loading ? (
           <LoaderDiv>
-            <Loader type="Oval" color="#595959" width={35} height={35} />
+            <Loader type="Oval" color="#6F6FFF" width={35} height={35} />
           </LoaderDiv>
         ) : (
           <ul>
@@ -108,7 +110,7 @@ export default function Transactions() {
           {loading ? null : (
             <>
               <button onClick={prevPage}>Anterior</button>
-              <Page>{pages}</Page>
+              <Page>{`${pages}/${lastPage}`}</Page>
               <button onClick={nextPage}>Próxima</button>
             </>
           )}

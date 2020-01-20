@@ -2,9 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Container } from "./styles";
 import {
-  MdShoppingCart,
+  MdShoppingBasket,
   MdAssignment,
-  MdCancel,
+  MdShoppingCart,
   MdPersonAdd,
   MdAddToQueue,
   MdUpdate,
@@ -24,15 +24,15 @@ export default function Dashboard() {
             <strong>Consultar compras</strong>
           </Link>
           {profile.provider || profile.admin ? (
-            <Link to="/sell">
+            <Link to="/show-sales">
               <MdShoppingCart size={40} color="#fff" />
-              <strong>Vender</strong>
+              <strong>Consultar vendas</strong>
             </Link>
           ) : null}
           {profile.provider || profile.admin ? (
-            <Link>
-              <MdCancel size={40} color="#fff" />
-              <strong>Cancelar venda</strong>
+            <Link to="/sell">
+              <MdShoppingBasket size={40} color="#fff" />
+              <strong>Vender</strong>
             </Link>
           ) : null}
           {profile.admin ? (
@@ -54,7 +54,7 @@ export default function Dashboard() {
             </Link>
           ) : null}
           {profile.admin ? (
-            <Link>
+            <Link to="add-admin">
               <MdAddToQueue size={40} color="#fff" />
               <strong>Eleger administradores</strong>
             </Link>

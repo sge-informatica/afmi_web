@@ -2,22 +2,30 @@ import styled from "styled-components";
 import { darken } from "polished";
 
 export const Wrapper = styled.div`
-  height: 100%;
   background: linear-gradient(-90deg, #cacaca, #dadada);
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-export const Content = styled.div`
+export const Container = styled.div`
   width: 100%;
   max-width: 315px;
   text-align: center;
+  margin-top: 80px;
 
   form {
     display: flex;
     flex-direction: column;
     margin-top: 30px;
+
+    h2 {
+      align-items: center;
+      justify-content: center;
+      color: #595959;
+      margin-bottom: 15px;
+      font-size: 17px;
+    }
 
     input {
       background: rgba(0, 0, 0, 0.3);
@@ -54,17 +62,6 @@ export const Content = styled.div`
 
       &:hover {
         background: ${darken(0.03, "#595959")};
-      }
-    }
-
-    a {
-      color: #000;
-      margin-top: 15px;
-      font-size: 16px;
-      opacity: 0.7;
-
-      &:hover {
-        opacity: 1;
       }
     }
   }

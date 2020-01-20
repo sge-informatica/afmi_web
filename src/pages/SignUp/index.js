@@ -78,7 +78,6 @@ export default function SignUp() {
           type="password"
           placeholder="Confirmação de senha"
         />
-
         <button type="submit">
           {loading ? (
             <Loader type="Oval" color="#FFF" width={30} height={30} />
