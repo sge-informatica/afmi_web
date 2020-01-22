@@ -40,6 +40,21 @@ export function unMaskCpf(document) {
     .replace(/(\d{4})(\d{1,2})/, "$1$2");
 }
 
+export function maskResponseDocument(document) {
+  return document.length === 11
+    ? document
+        .replace(/\D/g, "")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+    : document
+        .replace(/\D/g, "")
+        .replace(/(\d{2})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})/, "$1/$2")
+        .replace(/(\d{4})(\d{1,2})/, "$1-$2");
+}
+
 export function maskResponseValue(value) {
   if (value.length === 4)
     return value

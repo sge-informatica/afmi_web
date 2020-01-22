@@ -20,3 +20,9 @@ export function checkUpdateProfile(err) {
     ? err.map(msg => toast.error(msg.message))
     : toast.error(`${err.error.message}`);
 }
+
+export function recoverPassword(err) {
+  err instanceof Array
+    ? err.map(msg => toast.error(msg.message))
+    : toast.error("Não foi possível recuperar a senha, confira seus dados!");
+}

@@ -6,8 +6,10 @@ import pt from "date-fns/locale/pt";
 import { Container, Row, Col } from "react-grid-system";
 import { maskResponseValue } from "../../_util/masks";
 import { Wrapper, Article, Paginate, Page, LoaderDiv } from "./styles";
+import Footer from "../../components/Footer";
 import { MdCancel } from "react-icons/md";
 import { toast } from "react-toastify";
+import emoji from "../../assets/sad-emoji.png";
 import Loader from "react-loader-spinner";
 
 export default function ShowSale() {
@@ -105,25 +107,33 @@ export default function ShowSale() {
           color: "#000"
         }}
       >
-        {loading ? null : (
-          <Row
-            style={{
-              background: "rgba(0, 0, 0, 0.6)",
-              color: "#FFF",
-              fontSize: "15px"
-            }}
-          >
-            <Col style={{ borderRight: "1px solid #fff" }}>NOME</Col>
-            <Col style={{ borderRight: "1px solid #fff" }}>VALOR</Col>
-            <Col style={{ borderRight: "1px solid #fff" }}>DATA</Col>
-            <Col style={{ borderRight: "1px solid #fff" }}>CANCELADO</Col>
-            <Col></Col>
-          </Row>
+        {loading ? null : sales.length === 0 ? null : (
+          <>
+            <h2>Consultar vendas</h2>
+            <Row
+              style={{
+                background: "rgba(0, 0, 0, 0.6)",
+                color: "#FFF",
+                fontSize: "15px"
+              }}
+            >
+              <Col style={{ borderRight: "1px solid #fff" }}>NOME</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>VALOR</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>DATA</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>CANCELADO</Col>
+              <Col>CANCELAR</Col>
+            </Row>
+          </>
         )}
         {loading ? (
           <LoaderDiv>
             <Loader type="Oval" color="#6F6FFF" width={35} height={35} />
           </LoaderDiv>
+        ) : sales.length === 0 ? (
+          <strong>
+            Nenhuma venda foi realizada.
+            <img src={emoji} alt="sad-emoji" width={25} />
+          </strong>
         ) : (
           <ul>
             {sales.map(item => (
@@ -157,7 +167,7 @@ export default function ShowSale() {
         )}
         <br />
         <Paginate>
-          {loading ? null : (
+          {loading ? null : sales.length === 0 ? null : (
             <>
               <button onClick={prevPage}>Anterior</button>
               <Page>{`${pages}/${lastPage}`}</Page>
@@ -166,6 +176,7 @@ export default function ShowSale() {
           )}
         </Paginate>
       </Container>
+      <Footer />
     </Wrapper>
   );
 }

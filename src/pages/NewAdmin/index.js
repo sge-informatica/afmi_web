@@ -1,80 +1,120 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Wrapper, Container } from "./styles";
 import { Form, Input } from "@rocketseat/unform";
-import * as Yup from "yup";
 import api from "../../services/api";
+import { Container, LoaderDiv } from "./styles";
+import Footer from "../../components/Footer";
+import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
-import { maskDocument, maskDate } from "../../_util/masks";
+import { MdSearch, MdCheckCircle, MdRemoveCircle } from "react-icons/md";
+import {
+  unMaskCpf,
+  maskDocument,
+  maskResponseDocument
+} from "../../_util/masks";
 
-const schema = Yup.object().shape({
-  username: Yup.string().required("O nome é obrigatório."),
-  matricula: Yup.string().required("A matrícula é obrigatória."),
-  cnpj_cpf: Yup.string().required("O documento é obrigatório."),
-  birthdate: Yup.string().required("A data de nascimento é obrigatória.")
-});
-
-export default function NewAdmin() {
+export default function UpdateTransactions() {
   const token = useSelector(state => state.auth.token);
   const [doc, setDoc] = useState("");
-  const [date, setDate] = useState("");
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  async function handleSubmit({ username, matricula, cnpj_cpf, birthdate }) {
-    cnpj_cpf = cnpj_cpf
-      .replace(/\D/g, "")
-      .replace(/(\d{3})(\d{1,2})/, "$1$2")
-      .replace(/(\d{3})(\d{1,2})/, "$1$2")
-      .replace(/(\d{4})(\d{1,2})/, "$1$2");
-
-    birthdate = birthdate
-      .replace(/\D/g, "")
-      .replace(/(\d{2})(\d{1,2})/, "$1-$2")
-      .replace(/(\d{2})(\d{1,2})/, "$1-$2")
-      .replace(/(\d{2})(\d{1,2})/, "$1$2");
-
-    const year = birthdate.substring(6, 10);
-    const month = birthdate.substring(3, 5);
-    const day = birthdate.substring(0, 2);
-    const datanascimento = `${year}-${month}-${day}`;
+  async function handleSearch({ cnpj_cpf }) {
+    if (cnpj_cpf === "") return;
+    setDoc("");
+    setLoading(true);
     try {
-      const response = await api.post("/profiles", {
-        token,
-        username,
-        matricula,
-        cnpj_cpf,
-        datanascimento,
-        admin: true
+      const response = await api.get(`/profiles/${unMaskCpf(cnpj_cpf)}`, {
+        params: { token }
       });
-      console.tron.log(response.data);
+      setUsers([response.data]);
+      setLoading(false);
     } catch (err) {
-      toast.error(
-        "Acesso restrito, apenas administradores podem acessar esta rota."
-      );
+      toast.error(`${err.response.data.error.message}.`);
+      setLoading(false);
+      setDoc("");
+      setUsers([]);
+      return;
+    }
+  }
+
+  async function handleSubmit(id) {
+    try {
+      const response = await api.put(`/profiles/${id}`, { token, admin: true });
+      toast.success(`${response.data.nomecompleto} agora é um administrador!`);
+      setUsers([]);
+    } catch (err) {
+      toast.error("Sessão inválida, faça login na aplicação novamente.");
+    }
+  }
+
+  async function handleCancel(id) {
+    try {
+      const response = await api.put(`/profiles/${id}`, {
+        token,
+        admin: false
+      });
+      toast.error(`${response.data.nomecompleto} não é mais um administrador.`);
+      setUsers([]);
+    } catch (err) {
+      toast.error("Sessão inválida, faça login na aplicação novamente.");
     }
   }
 
   return (
-    <Wrapper>
-      <Container>
-        <Form schema={schema} onSubmit={handleSubmit}>
-          <h2>Alterar perfil para administrador</h2>
-          <Input name="username" placeholder="Nome completo" />
-          <Input name="matricula" placeholder="Digite a matrícula" />
+    <Container>
+      <h2>Eleger administrador</h2>
+      <Form onSubmit={handleSearch}>
+        <header>
           <Input
+            name="cnpj_cpf"
+            placeholder="Digite o CPF ou CNPJ do usuário"
             value={doc}
             onChange={e => setDoc(maskDocument(e.target.value))}
-            name="cnpj_cpf"
-            placeholder="CPF/CNPJ"
           />
-          <Input
-            value={date}
-            onChange={e => setDate(maskDate(e.target.value))}
-            name="birthdate"
-            placeholder="Data de nascimento"
-          />
-          <button type="submit">Enviar</button>
-        </Form>
-      </Container>
-    </Wrapper>
+          <button type="submit">
+            <MdSearch color="#555" size={25} />
+          </button>
+        </header>
+      </Form>
+      {loading ? (
+        <LoaderDiv>
+          <Loader type="Oval" color="#6F6FFF" width={35} height={35} />
+        </LoaderDiv>
+      ) : (
+        <ul>
+          {users.map(item => (
+            <li key={item.id}>
+              <strong>{item.user.username}</strong>
+              <span>{maskResponseDocument(item.cnpj_cpf)}</span>
+              <div>
+                <strong>
+                  Deseja conceder ou remover direitos de administrador?
+                </strong>
+                <header>
+                  <button onClick={() => handleCancel(item.id)}>
+                    <MdRemoveCircle
+                      color="#fff"
+                      size={50}
+                      style={{ paddingBottom: "5px" }}
+                    />
+                    Remover direitos
+                  </button>
+                  <button type="submit" onClick={() => handleSubmit(item.id)}>
+                    <MdCheckCircle
+                      color="#fff"
+                      size={50}
+                      style={{ paddingBottom: "5px" }}
+                    />
+                    Conceder direitos
+                  </button>
+                </header>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      <Footer />
+    </Container>
   );
 }

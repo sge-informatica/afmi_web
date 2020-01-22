@@ -1,14 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Container } from "./styles";
+import Footer from "../../components/Footer";
 import {
   MdShoppingBasket,
   MdAssignment,
   MdShoppingCart,
   MdPersonAdd,
-  MdAddToQueue,
-  MdUpdate,
-  MdMonetizationOn
+  MdAttachMoney,
+  MdMoneyOff,
+  MdAddToQueue
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 
@@ -36,31 +37,27 @@ export default function Dashboard() {
             </Link>
           ) : null}
           {profile.admin ? (
-            <Link>
+            <Link to="add-profile">
               <MdPersonAdd size={40} color="#fff" />
               <strong>Incluir novo perfil</strong>
             </Link>
           ) : null}
           {profile.admin ? (
-            <Link>
-              <MdUpdate size={40} color="#fff" />
-              <strong>Alterar perfis</strong>
-            </Link>
-          ) : null}
-          {profile.admin ? (
-            <Link>
-              <MdMonetizationOn size={40} color="#fff" />
-              <strong>Alterar transação</strong>
-            </Link>
-          ) : null}
-          {profile.admin ? (
-            <Link to="add-admin">
+            <Link to="new-admin">
               <MdAddToQueue size={40} color="#fff" />
-              <strong>Eleger administradores</strong>
+              <strong>Eleger/Remover administrador</strong>
+            </Link>
+          ) : null}
+          {profile.admin ? (
+            <Link to="/balance-adjustment">
+              <MdMoneyOff size={40} color="#fff" />
+              <MdAttachMoney size={40} color="#fff" />
+              <strong>Alterar saldo</strong>
             </Link>
           ) : null}
         </ul>
       </header>
+      <Footer />
     </Container>
   );
 }

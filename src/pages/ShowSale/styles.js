@@ -3,12 +3,30 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   background: linear-gradient(-90deg, #cacaca, #dadada);
 
+  h2 {
+    font-size: 18px;
+    color: #595959;
+    margin-bottom: 20px;
+  }
+
   button {
     margin-top: 10px;
     align-content: center;
     align-self: center;
     background: transparent;
     border: 0;
+  }
+
+  strong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    font-size: 18px;
+  }
+
+  img {
+    margin-left: 10px;
   }
 `;
 
@@ -28,7 +46,7 @@ export const Article = styled.article`
 export const Paginate = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 10px 0 20px 0;
+  margin: 10px 0 30px 0;
 
   button {
     padding: 10px;

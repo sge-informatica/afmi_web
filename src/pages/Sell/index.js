@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Form, Input } from "@rocketseat/unform";
 import { Container, LoaderDiv } from "./styles";
+import Footer from "../../components/Footer";
 import Loader from "react-loader-spinner";
 import api from "../../services/api";
 import { MdSearch, MdCheckCircle, MdCancel } from "react-icons/md";
@@ -73,6 +74,7 @@ export default function Sell() {
 
   return (
     <Container>
+      <h2>Vender</h2>
       <Form onSubmit={handleSearch}>
         <header>
           <Input
@@ -113,15 +115,21 @@ export default function Sell() {
                   onChange={e => setValue(maskValue(e.target.value))}
                 />
                 <header>
-                  <button>
+                  <button onClick={() => handleCancel()}>
                     <MdCancel
                       color="#fff"
                       size={50}
-                      onClick={() => handleCancel()}
+                      style={{ paddingBottom: "5px" }}
                     />
+                    Cancelar
                   </button>
                   <button type="submit" onClick={() => handleSubmit(value)}>
-                    <MdCheckCircle color="#fff" size={50} />
+                    <MdCheckCircle
+                      color="#fff"
+                      size={50}
+                      style={{ paddingBottom: "5px" }}
+                    />
+                    Vender
                   </button>
                 </header>
               </div>
@@ -129,6 +137,7 @@ export default function Sell() {
           ))}
         </ul>
       )}
+      <Footer />
     </Container>
   );
 }

@@ -2,11 +2,18 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   max-width: 1000px;
-  margin: 50px auto;
+  margin: 60px auto;
   display: flex;
   flex-direction: column;
 
-  > form {
+  > h2 {
+    font-size: 18px;
+    color: #595959;
+    align-self: center;
+    margin-bottom: 20px;
+  }
+
+  form {
     display: flex;
     align-self: center;
     align-items: center;
@@ -92,13 +99,17 @@ export const Container = styled.div`
         > header {
           display: flex;
           flex-direction: row;
-          justify-content: space-evenly;
+          justify-content: space-between;
           align-items: center;
 
           button {
+            display: flex;
+            flex-direction: column;
             border: 0;
             background: transparent;
-            margin: 20px 0 0 0;
+            margin: 28px 0 0 0;
+            align-items: center;
+            color: #fff;
           }
         }
       }

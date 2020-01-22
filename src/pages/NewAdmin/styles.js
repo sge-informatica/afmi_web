@@ -1,68 +1,118 @@
 import styled from "styled-components";
-import { darken } from "polished";
-
-export const Wrapper = styled.div`
-  background: linear-gradient(-90deg, #cacaca, #dadada);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export const Container = styled.div`
-  width: 100%;
-  max-width: 315px;
-  text-align: center;
-  margin-top: 80px;
+  max-width: 1000px;
+  margin: 60px auto;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    font-size: 18px;
+    color: #595959;
+    align-self: center;
+    margin-bottom: 20px;
+  }
 
   form {
     display: flex;
-    flex-direction: column;
-    margin-top: 30px;
+    align-self: center;
+    align-items: center;
 
-    h2 {
+    header {
+      display: flex;
+      align-self: center;
       align-items: center;
-      justify-content: center;
-      color: #595959;
-      margin-bottom: 15px;
-      font-size: 17px;
-    }
 
-    input {
-      background: rgba(0, 0, 0, 0.3);
-      border: 0;
-      border-radius: 4px;
-      height: 44px;
-      padding: 0 15px;
-      color: #fff;
-      margin: 0 0 10px;
-
-      &::placeholder {
-        color: rgba(255, 255, 255, 1);
+      input {
+        text-align: center;
+        width: 250px;
+        background: none;
+        border: 0;
+        padding: 8px;
+        border-bottom: 1px solid #555;
+        transition: 0.6s;
+        &:focus {
+          width: 300px;
+        }
       }
-    }
 
-    span {
-      align-items: center;
-      justify-content: center;
-      color: #f64c75;
-      margin: 0 0 10px;
-      font-weight: bold;
-    }
-
-    button {
-      margin: 5px 0 0;
-      height: 44px;
-      background: #595959;
-      font-weight: bold;
-      border: 0;
-      border-radius: 4px;
-      font-size: 16px;
-      transition: 0.2s;
-      color: #fff;
-
-      &:hover {
-        background: ${darken(0.03, "#595959")};
+      button {
+        background: transparent;
+        border: none;
+        margin: 10px auto auto 12px;
       }
     }
   }
+
+  ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+
+    li {
+      padding: 30px 100px;
+      border-radius: 5px;
+      background: #595959;
+
+      strong {
+        display: block;
+        text-align: center;
+        color: #fff;
+        font-size: 21px;
+      }
+
+      span {
+        display: block;
+        text-align: center;
+        color: #eee;
+        margin-top: 18px;
+        font-style: italic;
+      }
+
+      h2 {
+        font-size: 17px;
+        display: block;
+        color: #eee;
+        margin-top: 13px;
+      }
+
+      div {
+        max-width: 1000px;
+        margin: 50px 0 0 0;
+        display: flex;
+        flex-direction: column;
+
+        > strong {
+          display: block;
+          color: #fff;
+          font-size: 17px;
+        }
+
+        > header {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+
+          button {
+            display: flex;
+            flex-direction: column;
+            border: 0;
+            background: transparent;
+            margin: 28px 0 0 0;
+            align-items: center;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const LoaderDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 200px;
+  align-items: center;
 `;

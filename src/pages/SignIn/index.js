@@ -9,9 +9,9 @@ import logo from "../../assets/logo.png";
 
 const schema = Yup.object().shape({
   email: Yup.string()
-    .email("O e-mail não é válido")
-    .required("O e-mail é obrigatório"),
-  password: Yup.string().required("A senha é obrigatória")
+    .email("O e-mail não é válido.")
+    .required("O e-mail é obrigatório."),
+  password: Yup.string().required("A senha é obrigatória.")
 });
 
 export default function SignIn() {
@@ -37,6 +37,7 @@ export default function SignIn() {
           )}
         </button>
         <Link to="/register">Criar conta gratuita</Link>
+        <Link to="/forgot-password">Esqueci a senha</Link>
       </Form>
     </>
   );

@@ -2,17 +2,23 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   background: linear-gradient(-90deg, #cacaca, #dadada);
-`;
 
-export const Container = styled.div`
-  max-width: 800px;
-  margin: 30px auto 0;
-  padding: 0 30px 10px 30px;
+  h2 {
+    font-size: 18px;
+    color: #595959;
+    margin-bottom: 20px;
+  }
 
-  ul {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-column-gap: 15px;
+  strong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    font-size: 18px;
+  }
+
+  img {
+    margin-left: 10px;
   }
 `;
 
@@ -24,11 +30,16 @@ export const LoaderDiv = styled.div`
 `;
 
 export const Article = styled.div`
-  background: #595959;
-  border: 3px solid #fff;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: row;
+  color: #000;
+  padding: 15px 0 15px 0;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  margin: 0 -15px 0 -15px;
+  font-weight: bold;
+  font-size: 14px;
 
   strong {
     display: flex;
@@ -47,42 +58,15 @@ export const Article = styled.div`
   }
 `;
 
-export const Value = styled.text`
-  display: flex;
-  justify-content: center;
-  color: #fff;
-  font-weight: bold;
-  font-size: 13px;
-  margin: 10px 0;
-`;
-
-export const Historic = styled.text`
-  display: flex;
-  justify-content: center;
-  color: #fff;
-  font-size: 14px;
-  font-weight: bold;
-  margin: 10px 0;
-`;
-
 export const TransactionType = styled.text`
   margin-left: 5px;
-  color: #f64c75;
-`;
-
-export const Canceled = styled.text`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px 0 0;
-  font-weight: bold;
-  color: #f64c75;
+  color: #952a2a;
 `;
 
 export const Paginate = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 10px 0 20px 0;
+  margin: 10px 0 30px 0;
 
   button {
     padding: 10px;
@@ -117,5 +101,5 @@ export const Page = styled.text`
   color: #fff;
   font-size: 12px;
   font-weight: bold;
-  padding: 8px;
+  padding: 0 8px;
 `;

@@ -2,19 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import api from "../../services/api";
 import { format, parseISO } from "date-fns";
+import Footer from "../../components/Footer";
 import pt from "date-fns/locale/pt";
 import {
   Wrapper,
-  Container,
   LoaderDiv,
   Article,
-  Value,
-  Historic,
-  Canceled,
   TransactionType,
   Paginate,
   Page
 } from "./styles";
+import { Container, Row, Col } from "react-grid-system";
+import emoji from "../../assets/sad-emoji.png";
 import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
 
@@ -84,30 +83,94 @@ export default function Transactions() {
 
   return (
     <Wrapper>
-      <Container>
+      <Container
+        fluid
+        style={{
+          lineHeight: "40px",
+          margin: "40px 180px 0 180px",
+          textAlign: "center",
+          color: "#000"
+        }}
+      >
+        {loading ? null : data.length === 0 ? null : (
+          <>
+            <h2>Consultar compras</h2>
+            <Row
+              style={{
+                background: "rgba(0, 0, 0, 0.6)",
+                color: "#FFF",
+                fontSize: "15px"
+              }}
+            >
+              <Col style={{ borderRight: "1px solid #fff" }}>NOME</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>DATA</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>VALOR</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>HISTÓRICO</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>SALDO</Col>
+              <Col>CANCELADO</Col>
+            </Row>
+          </>
+        )}
         {loading ? (
           <LoaderDiv>
             <Loader type="Oval" color="#6F6FFF" width={35} height={35} />
           </LoaderDiv>
+        ) : data.length === 0 ? (
+          <strong>
+            Nenhuma compra foi realizada.
+            <img src={emoji} alt="sad-emoji" width={25} />
+          </strong>
         ) : (
           <ul>
             {data.map(item => (
               <Article key={item.id}>
-                <strong>{item.provider_name}</strong>
-                <p>{formatDate(item.created_at)}</p>
-                <Value>
+                <Col
+                  style={{
+                    borderRight: "1px solid #aaa",
+                    fontSize: "13px"
+                  }}
+                >
+                  {item.provider_name}
+                </Col>
+                <Col
+                  style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
+                >
+                  {formatDate(item.created_at)}
+                </Col>
+                <Col
+                  style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
+                >
                   Valor: R${item.valor}
                   <TransactionType>{item.DC}</TransactionType>
-                </Value>
-                <Historic>{item.historico ? item.historico : null}</Historic>
-                <p>Saldo atual: R${item.saldo}</p>
-                <Canceled>{item.canceled ? "CANCELADO" : null}</Canceled>
+                </Col>
+                <Col
+                  style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
+                >
+                  {item.historico ? item.historico : null}
+                </Col>
+                <Col
+                  style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
+                >
+                  Saldo: R${item.saldo}
+                </Col>
+                <Col
+                  style={
+                    item.canceled
+                      ? {
+                          fontSize: "13px",
+                          color: "#952A2A"
+                        }
+                      : { fontSize: "13px" }
+                  }
+                >
+                  {item.canceled ? "Sim" : "Não"}
+                </Col>
               </Article>
             ))}
           </ul>
         )}
         <Paginate>
-          {loading ? null : (
+          {loading ? null : data.length === 0 ? null : (
             <>
               <button onClick={prevPage}>Anterior</button>
               <Page>{`${pages}/${lastPage}`}</Page>
@@ -116,6 +179,7 @@ export default function Transactions() {
           )}
         </Paginate>
       </Container>
+      <Footer />
     </Wrapper>
   );
 }
