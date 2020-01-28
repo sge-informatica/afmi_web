@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import api from "../../services/api";
-import { format, parseISO } from "date-fns";
-import pt from "date-fns/locale/pt";
+import { formatDateHour } from "../../_util/formatDate";
 import { Container, Row, Col } from "react-grid-system";
 import { maskResponseValue } from "../../_util/masks";
 import { Wrapper, Article, Paginate, Page, LoaderDiv } from "./styles";
@@ -18,25 +17,23 @@ export default function ShowSale() {
   const token = useSelector(state => state.auth.token);
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  function formatDate(date) {
-    const parsed = parseISO(date);
-    const formattedDate = format(parsed, "dd 'de' MMMM 'de' yyyy", {
-      locale: pt
-    });
-    return formattedDate;
-  }
+  const [hover, setHover] = useState(false);
 
   useEffect(() => {
     async function loadSales() {
-      setLoading(true);
-      const response = await api.get("/transactions", {
-        params: { token }
-      });
-      setPages(response.data.page);
-      setLastPage(response.data.lastPage);
-      setSales(response.data.data);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const response = await api.get("/transactions", {
+          params: { token }
+        });
+        setPages(response.data.page);
+        setLastPage(response.data.lastPage);
+        setSales(response.data.data);
+        setLoading(false);
+      } catch (err) {
+        toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
+        setLoading(false);
+      }
     }
 
     loadSales();
@@ -54,7 +51,7 @@ export default function ShowSale() {
       setPages(pageNumber);
       setLoading(false);
     } catch (err) {
-      toast.error("Sessão inválida, faça login na aplicação novamente.");
+      toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
       setLoading(false);
     }
   }
@@ -71,7 +68,7 @@ export default function ShowSale() {
       setPages(pageNumber);
       setLoading(false);
     } catch (err) {
-      toast.error("Sessão inválida, faça login na aplicação novamente.");
+      toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
       setLoading(false);
     }
   }
@@ -89,11 +86,17 @@ export default function ShowSale() {
       setLastPage(response.data.lastPage);
       setSales(response.data.data);
       setLoading(false);
-      toast.success("Transação excluída com sucesso!");
+      toast.success("Transação excluída com sucesso! 😁");
     } catch (err) {
       setLoading(false);
       toast.error(`${err.response.data.error.message}.`);
     }
+  }
+
+  function returnCanceled(item) {
+    if (!item.canceled) return;
+    const date = formatDateHour(item.canceled_at);
+    return date;
   }
 
   return (
@@ -145,7 +148,7 @@ export default function ShowSale() {
                   {maskResponseValue(item.valor)}
                 </Col>
                 <Col style={{ borderRight: "1px solid #aaa" }}>
-                  {formatDate(item.created_at)}
+                  {formatDateHour(item.created_at)}
                 </Col>
                 <Col
                   style={
@@ -154,7 +157,16 @@ export default function ShowSale() {
                       : { color: "#000", borderRight: "1px solid #aaa" }
                   }
                 >
-                  {item.canceled ? "Sim" : "Não"}
+                  <p
+                    onMouseEnter={() => (item.canceled ? setHover(true) : null)}
+                    onMouseLeave={() => setHover(false)}
+                  >
+                    {item.canceled
+                      ? hover
+                        ? returnCanceled(item)
+                        : "Sim"
+                      : "Não"}
+                  </p>
                 </Col>
                 <Col>
                   <button onClick={() => deleteSales(item.id)}>

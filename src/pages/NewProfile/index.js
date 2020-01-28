@@ -60,9 +60,9 @@ export default function NewProfile() {
             matricula,
             datanascimento
           });
-      toast.success("Novo usuário cadastrado com sucesso!");
+      toast.success("Novo usuário cadastrado com sucesso! 😁");
     } catch (err) {
-      toast.error("O CPF/CNPJ já foi usado por outra pessoa.");
+      toast.error("O CPF/CNPJ já foi usado por outra pessoa. 🙁");
     }
   }
 

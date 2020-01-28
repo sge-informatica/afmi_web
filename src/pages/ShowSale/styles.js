@@ -45,8 +45,8 @@ export const Article = styled.article`
 
 export const Paginate = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin: 10px 0 30px 0;
+  justify-content: space-evenly;
+  margin: 0 0 30px 0;
 
   button {
     padding: 10px;
@@ -67,11 +67,11 @@ export const Paginate = styled.div`
   p {
     color: #fff;
     font-size: 13px;
-    margin: 18px 0;
+    margin: 5px 0;
   }
 `;
 
-export const Page = styled.text`
+export const Page = styled.p`
   display: flex;
   justify-content: center;
   align-items: center;

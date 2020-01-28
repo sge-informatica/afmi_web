@@ -12,7 +12,7 @@ export function* updateProfile({ payload }) {
       rest.old_password ? rest : {}
     );
     yield call(api.put, `users/${id}`, profile);
-    toast.success("Dados atualizados com sucesso!");
+    toast.success("Dados atualizados com sucesso! 😁");
 
     const setProfile = {
       id: payload.data.id,

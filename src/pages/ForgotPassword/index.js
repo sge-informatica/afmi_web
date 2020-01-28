@@ -25,7 +25,9 @@ export default function ForgotPassword() {
         email,
         redirect_url
       });
-      toast.success(`Código de alteração de senha foi enviado para ${email}.`);
+      toast.success(
+        `Código de alteração de senha foi enviado para ${email}. 😁`
+      );
       setLoading(false);
       setRedirect(true);
       setEmail("");

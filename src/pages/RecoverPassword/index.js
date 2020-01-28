@@ -29,7 +29,7 @@ export default function RecoverPassword() {
         password_confirmation
       });
       setLoading(false);
-      toast.success(`${response.data.ok}.`);
+      toast.success(`${response.data.ok}. 😁`);
       setRedirect(true);
     } catch (err) {
       const error = err.response.data;

@@ -6,7 +6,7 @@ export const Container = styled.div`
   padding: 0 30px;
 `;
 
-export const Text = styled.text`
+export const Text = styled.p`
   margin-top: 2px;
   display: block;
   font-size: 12px;

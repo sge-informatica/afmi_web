@@ -30,7 +30,7 @@ export default function UpdateTransactions() {
       setUsers([response.data]);
       setLoading(false);
     } catch (err) {
-      toast.error(`${err.response.data.error.message}.`);
+      toast.error(`${err.response.data.error.message}. 🙁`);
       setLoading(false);
       setDoc("");
       setUsers([]);
@@ -41,10 +41,12 @@ export default function UpdateTransactions() {
   async function handleSubmit(id) {
     try {
       const response = await api.put(`/profiles/${id}`, { token, admin: true });
-      toast.success(`${response.data.nomecompleto} agora é um administrador!`);
+      toast.success(
+        `${response.data.nomecompleto} agora é um administrador! 😁`
+      );
       setUsers([]);
     } catch (err) {
-      toast.error("Sessão inválida, faça login na aplicação novamente.");
+      toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
     }
   }
 
@@ -54,10 +56,12 @@ export default function UpdateTransactions() {
         token,
         admin: false
       });
-      toast.error(`${response.data.nomecompleto} não é mais um administrador.`);
+      toast.error(
+        `${response.data.nomecompleto} não é mais um administrador. 🙁`
+      );
       setUsers([]);
     } catch (err) {
-      toast.error("Sessão inválida, faça login na aplicação novamente.");
+      toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
     }
   }
 

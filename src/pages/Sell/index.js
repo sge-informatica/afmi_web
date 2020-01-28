@@ -33,7 +33,7 @@ export default function Sell() {
       setLoading(false);
       setUsers([response.data]);
     } catch (err) {
-      toast.error("Usuário não encontrado, verifique os dados.");
+      toast.error("Usuário não encontrado, verifique os dados. 🙁");
       setLoading(false);
       setDoc("");
       setUsers([]);
@@ -57,12 +57,12 @@ export default function Sell() {
       const response = await api.get(`/profiles/${cnpj_cpf}`, {
         params: { token }
       });
-      toast.success("Transação realizada com sucesso!");
+      toast.success("Transação realizada com sucesso! 😁");
       setValue("");
       setUsers([response.data]);
       setLoading(false);
     } catch (err) {
-      toast.error(`Transação inválida, saldo insuficiente.`);
+      toast.error(`Transação inválida, saldo insuficiente. 🙁`);
       setValue("");
       setLoading(false);
     }

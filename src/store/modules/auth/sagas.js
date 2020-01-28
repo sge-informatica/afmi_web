@@ -45,7 +45,7 @@ export function* signUp({ payload }) {
       password,
       password_confirmation
     });
-    toast.success("Cadastro realizado com sucesso!");
+    toast.success("Cadastro realizado com sucesso! 😁");
     history.push("/dashboard");
   } catch (err) {
     const error = err.response.data;

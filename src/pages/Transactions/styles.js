@@ -65,7 +65,7 @@ export const TransactionType = styled.text`
 
 export const Paginate = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   margin: 10px 0 30px 0;
 
   button {
@@ -93,7 +93,6 @@ export const Paginate = styled.div`
 
 export const Page = styled.text`
   display: flex;
-  width: 30px;
   justify-content: center;
   align-items: center;
   border-radius: 5px;
@@ -101,5 +100,5 @@ export const Page = styled.text`
   color: #fff;
   font-size: 12px;
   font-weight: bold;
-  padding: 0 8px;
+  padding: 0 12px;
 `;

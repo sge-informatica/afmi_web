@@ -52,7 +52,7 @@ export default function Dashboard() {
             <Link to="/balance-adjustment">
               <MdMoneyOff size={40} color="#fff" />
               <MdAttachMoney size={40} color="#fff" />
-              <strong>Alterar saldo</strong>
+              <strong>Ajuste de saldo</strong>
             </Link>
           ) : null}
         </ul>

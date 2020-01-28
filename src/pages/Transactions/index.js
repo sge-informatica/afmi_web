@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import api from "../../services/api";
-import { format, parseISO } from "date-fns";
 import Footer from "../../components/Footer";
-import pt from "date-fns/locale/pt";
 import {
   Wrapper,
   LoaderDiv,
@@ -12,6 +10,7 @@ import {
   Paginate,
   Page
 } from "./styles";
+import { formatDateHour } from "../../_util/formatDate";
 import { Container, Row, Col } from "react-grid-system";
 import emoji from "../../assets/sad-emoji.png";
 import Loader from "react-loader-spinner";
@@ -25,24 +24,21 @@ export default function Transactions() {
   const id = useSelector(state => state.user.profile.id);
   const token = useSelector(state => state.auth.token);
 
-  function formatDate(date) {
-    const parsed = parseISO(date);
-    const formattedDate = format(parsed, "dd 'de' MMMM 'de' yyyy", {
-      locale: pt
-    });
-    return formattedDate;
-  }
-
   useEffect(() => {
     async function loadTransactions() {
-      setLoading(true);
-      const response = await api.get(`transactions/${id}`, {
-        params: { token }
-      });
-      setData(response.data.data);
-      setPages(response.data.page);
-      setLastPage(response.data.lastPage);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const response = await api.get(`transactions/${id}`, {
+          params: { token }
+        });
+        setData(response.data.data);
+        setPages(response.data.page);
+        setLastPage(response.data.lastPage);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
+      }
     }
     loadTransactions();
   }, [id, token]);
@@ -59,7 +55,7 @@ export default function Transactions() {
       setPages(pageNumber);
       setLoading(false);
     } catch (err) {
-      toast.error("Sessão inválida, faça login na aplicação novamente.");
+      toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
       setLoading(false);
     }
   }
@@ -76,7 +72,7 @@ export default function Transactions() {
       setPages(pageNumber);
       setLoading(false);
     } catch (err) {
-      toast.error("Sessão inválida, faça login na aplicação novamente.");
+      toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
       setLoading(false);
     }
   }
@@ -135,7 +131,7 @@ export default function Transactions() {
                 <Col
                   style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
                 >
-                  {formatDate(item.created_at)}
+                  {formatDateHour(item.created_at)}
                 </Col>
                 <Col
                   style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
