@@ -1,49 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Redirect, Link } from "react-router-dom";
 import api from "../../services/api";
 import { formatDateHour } from "../../_util/formatDate";
-import { Container, Row, Col } from "react-grid-system";
-import { maskResponseValue } from "../../_util/masks";
 import {
   Wrapper,
+  LoaderDiv,
   Article,
   Paginate,
   Page,
-  LoaderDiv,
   LoaderDivDialog
 } from "./styles";
+import { Container, Row, Col } from "react-grid-system";
 import Footer from "../../components/Footer";
 import { MdCancel } from "react-icons/md";
-import { toast } from "react-toastify";
 import emoji from "../../assets/sad-emoji.png";
+import { toast } from "react-toastify";
 import Loader from "react-loader-spinner";
 
-export default function ShowSale() {
-  let [pages, setPages] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
+export default function Invoices() {
   const token = useSelector(state => state.auth.token);
   const admin = useSelector(state => state.user.profile.profile.admin);
-  const provider = useSelector(state => state.user.profile.profile.provider);
-  const [sales, setSales] = useState([]);
+  const [data, setData] = useState([]);
+  let [pages, setPages] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [hover, setHover] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [balance, setBalance] = useState("");
   const [id, setId] = useState("");
-  const [client, setClient] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
 
   useEffect(() => {
-    async function loadSales() {
+    async function loadInvoices() {
       try {
         setLoading(true);
-        const response = await api.get("/transactions", {
+        const response = await api.get(`invoices?page=${pages}`, {
           params: { token }
         });
+        setData(response.data.data);
         setPages(response.data.page);
         setLastPage(response.data.lastPage);
-        setSales(response.data.data);
         setLoading(false);
       } catch (err) {
         toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
@@ -51,18 +48,18 @@ export default function ShowSale() {
       }
     }
 
-    loadSales();
-  }, [token]);
+    loadInvoices();
+  }, [token, pages]);
 
   async function nextPage() {
     if (pages === lastPage) return;
     setLoading(true);
     pages += 1;
     try {
-      const response = await api.get(`transactions?page=${pages}`, {
+      const response = await api.get(`invoices?page=${pages}`, {
         params: { token }
       });
-      setSales(response.data.data);
+      setData(response.data.data);
       setPages(pages);
       setLoading(false);
     } catch (err) {
@@ -76,10 +73,10 @@ export default function ShowSale() {
     setLoading(true);
     pages -= 1;
     try {
-      const response = await api.get(`transactions?page=${pages}`, {
+      const response = await api.get(`invoices?page=${pages}`, {
         params: { token }
       });
-      setSales(response.data.data);
+      setData(response.data.data);
       setPages(pages);
       setLoading(false);
     } catch (err) {
@@ -88,23 +85,23 @@ export default function ShowSale() {
     }
   }
 
-  async function deleteSales(id) {
+  async function deleteInvoice(id) {
     try {
       setConfirmLoading(true);
-      await api.delete(`/transactions/${id}`, {
+      await api.delete(`/invoices/${id}`, {
         params: { token }
       });
       setConfirmLoading(false);
       setConfirm(false);
       setLoading(true);
-      const response = await api.get(`/transactions?page=${pages}`, {
+      const response = await api.get(`/invoices?page=${pages}`, {
         params: { token }
       });
       setPages(pages);
       setLastPage(response.data.lastPage);
-      setSales(response.data.data);
+      setData(response.data.data);
       setLoading(false);
-      toast.success("Transação excluída com sucesso! 😁");
+      toast.success("Fatura excluída com sucesso! 😁");
     } catch (err) {
       setLoading(false);
       setConfirmLoading(false);
@@ -112,11 +109,12 @@ export default function ShowSale() {
     }
   }
 
-  function Dialog(id, client, balance) {
-    setId(id);
+  function Dialog(id, description, date) {
+    const data = formatDateHour(date);
     setConfirm(true);
-    setClient(client);
-    setBalance(maskResponseValue(balance));
+    setId(id);
+    setDescription(description);
+    setDate(data);
     document.onkeydown = function(e) {
       if (e.keyCode === 27) {
         setConfirm(false);
@@ -124,28 +122,22 @@ export default function ShowSale() {
     };
   }
 
-  function returnCanceled(item) {
-    if (!item.canceled) return;
-    const date = formatDateHour(item.canceled_at);
-    return date;
-  }
-
   return (
     <Wrapper>
-      {admin || provider ? null : <Redirect to="/dashboard" />}
+      {admin ? null : <Redirect to="/dashboard" />}
       <Container
         fluid
         style={{
           lineHeight: "40px",
-          margin: "40px 180px 0 180px",
+          margin: "40px 300px 0 300px",
           textAlign: "center",
           color: "#000"
         }}
       >
-        {loading ? null : sales.length === 0 ? null : (
+        {loading ? null : data.length === 0 ? null : (
           <>
             <h2 style={confirm ? { filter: "blur(5px)" } : {}}>
-              Consultar vendas
+              Consultar faturas fechadas
             </h2>
             <Row
               style={
@@ -163,11 +155,11 @@ export default function ShowSale() {
                     }
               }
             >
-              <Col style={{ borderRight: "1px solid #fff" }}>NOME</Col>
-              <Col style={{ borderRight: "1px solid #fff" }}>VALOR</Col>
-              <Col style={{ borderRight: "1px solid #fff" }}>DATA</Col>
-              <Col style={{ borderRight: "1px solid #fff" }}>CANCELADO</Col>
-              <Col>CANCELAR</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>DESCRIÇÃO</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>
+                DATA DO FECHAMENTO
+              </Col>
+              <Col>CANCELAR FATURA</Col>
             </Row>
           </>
         )}
@@ -175,55 +167,40 @@ export default function ShowSale() {
           <LoaderDiv>
             <Loader type="Oval" color="#6F6FFF" width={35} height={35} />
           </LoaderDiv>
-        ) : sales.length === 0 ? (
+        ) : data.length === 0 ? (
           <strong>
-            Nenhuma venda foi realizada.
+            Nenhuma fatura foi fechada.
             <img src={emoji} alt="sad-emoji" width={25} />
           </strong>
         ) : (
           <ul style={confirm ? { filter: "blur(5px)" } : {}}>
-            {sales.map(item => (
+            {data.map(item => (
               <Article key={item.id}>
-                <Col style={{ borderRight: "1px solid #aaa" }}>
-                  {item.user_name}
-                </Col>
-                <Col style={{ borderRight: "1px solid #aaa" }}>
-                  {maskResponseValue(item.valor)}
+                <Col
+                  style={{
+                    borderRight: "1px solid #aaa"
+                  }}
+                >
+                  <Link
+                    to={{
+                      pathname: "/invoice-details",
+                      state: { id: item.id, title: item.description }
+                    }}
+                  >
+                    {item.description}
+                  </Link>
                 </Col>
                 <Col style={{ borderRight: "1px solid #aaa" }}>
                   {formatDateHour(item.created_at)}
                 </Col>
-                <Col
-                  style={
-                    item.canceled
-                      ? { color: "#952A2A", borderRight: "1px solid #aaa" }
-                      : { color: "#000", borderRight: "1px solid #aaa" }
-                  }
-                >
-                  <p
-                    onMouseEnter={() =>
-                      item.canceled ? (confirm ? null : setHover(true)) : null
-                    }
-                    onMouseLeave={() => setHover(false)}
-                  >
-                    {item.canceled
-                      ? hover
-                        ? returnCanceled(item)
-                        : "Sim"
-                      : "Não"}
-                  </p>
-                </Col>
                 <Col>
                   <button
-                    style={
-                      confirm || item.canceled ? { pointerEvents: "none" } : {}
+                    style={confirm ? { pointerEvents: "none" } : {}}
+                    onClick={() =>
+                      Dialog(item.id, item.description, item.created_at)
                     }
-                    onClick={() => Dialog(item.id, item.user_name, item.valor)}
                   >
-                    <MdCancel
-                      size={25}
-                      color={item.canceled ? "#CBABAB" : "#CD7171"}
-                    />
+                    <MdCancel size={25} color="#CD7171" />
                   </button>
                 </Col>
               </Article>
@@ -231,10 +208,10 @@ export default function ShowSale() {
           </ul>
         )}
         <Paginate style={confirm ? { filter: "blur(5px)" } : {}}>
-          {loading ? null : sales.length === 0 ? null : (
+          {loading ? null : data.length === 0 ? null : (
             <>
               <button
-                style={confirm || pages === 1 ? { pointerEvents: "none" } : {}}
+                style={pages === 1 || confirm ? { pointerEvents: "none" } : {}}
                 onClick={prevPage}
               >
                 Anterior
@@ -242,7 +219,7 @@ export default function ShowSale() {
               <Page>{`${pages}/${lastPage}`}</Page>
               <button
                 style={
-                  confirm || pages === lastPage ? { pointerEvents: "none" } : {}
+                  pages === lastPage || confirm ? { pointerEvents: "none" } : {}
                 }
                 onClick={nextPage}
               >
@@ -293,7 +270,7 @@ export default function ShowSale() {
                     color: "#eee"
                   }}
                 >
-                  Deseja cancelar esta compra?
+                  Deseja cancelar esta fatura?
                 </strong>
               </div>
               <p
@@ -305,7 +282,7 @@ export default function ShowSale() {
                   color: "#952A2A"
                 }}
               >
-                {client}
+                {description}
               </p>
               <p
                 style={{
@@ -315,7 +292,7 @@ export default function ShowSale() {
                   fontSize: "15px"
                 }}
               >
-                Valor: {balance}
+                Data: {date}
               </p>
               <header
                 style={{
@@ -349,7 +326,7 @@ export default function ShowSale() {
                     color: "#EEE",
                     margin: "4px 0 4px 0"
                   }}
-                  onClick={() => deleteSales(id)}
+                  onClick={() => deleteInvoice(id)}
                 >
                   Sim
                 </button>

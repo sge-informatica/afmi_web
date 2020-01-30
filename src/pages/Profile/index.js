@@ -1,10 +1,15 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import * as Yup from "yup";
 import { Form, Input } from "@rocketseat/unform";
 import { updateProfileRequest } from "../../store/modules/users/actions";
 import { Container } from "./styles";
 import Loader from "react-loader-spinner";
 import { signOut } from "../../store/modules/auth/actions";
+
+const schema = Yup.object().shape({
+  username: Yup.string().required("O nome é obrigatório.")
+});
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -24,7 +29,7 @@ export default function Profile() {
 
   return (
     <Container>
-      <Form initialData={profile} onSubmit={handleSubmit}>
+      <Form schema={schema} initialData={profile} onSubmit={handleSubmit}>
         <Input name="username" placeholder="Nome completo" />
 
         <hr />

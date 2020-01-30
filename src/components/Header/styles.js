@@ -34,6 +34,7 @@ export const Content = styled.div`
 
     a {
       font-weight: bold;
+      text-decoration: underline;
       color: #595959;
       transition: color, 0.3s;
 
@@ -66,6 +67,7 @@ export const Profile = styled.div`
 
     a {
       font-size: 12px;
+      text-decoration: underline;
       font-weight: bold;
       color: #3b4e33;
       transition: color 0.2s;

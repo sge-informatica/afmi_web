@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import api from "../../services/api";
 import { Form, Input } from "@rocketseat/unform";
@@ -19,12 +20,13 @@ import {
   LoaderDivDialog
 } from "./styles";
 import { Container, Row, Col } from "react-grid-system";
-import { MdSearch, MdLoop } from "react-icons/md";
+import { MdSearch, MdUpdate } from "react-icons/md";
 import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
 
 export default function BalanceAdjust() {
   const token = useSelector(state => state.auth.token);
+  const admin = useSelector(state => state.user.profile.profile.admin);
   const [name, setName] = useState("");
   const [users, setUsers] = useState([]);
   let [pages, setPages] = useState(1);
@@ -146,12 +148,13 @@ export default function BalanceAdjust() {
 
   return (
     <Wrapper>
+      {!admin ? <Redirect to="/dashboard" /> : null}
       <h2 style={confirm ? { filter: "blur(5px)" } : {}}>Ajustar saldo</h2>
       <Form
         style={confirm ? { filter: "blur(5px)" } : {}}
         onSubmit={handleSearch}
       >
-        <header>
+        <header style={confirm ? { pointerEvents: "none" } : {}}>
           <Input
             name="name"
             placeholder="Digite o nome do usuário"
@@ -246,6 +249,13 @@ export default function BalanceAdjust() {
                 </Col>
                 <Col style={{ padding: "-15px" }}>
                   <button
+                    style={
+                      item.user
+                        ? confirm
+                          ? { pointerEvents: "none" }
+                          : {}
+                        : { pointerEvents: "none" }
+                    }
                     onClick={() =>
                       confirm
                         ? null
@@ -258,7 +268,10 @@ export default function BalanceAdjust() {
                         : null
                     }
                   >
-                    <MdLoop size={25} color="#ccc" />
+                    <MdUpdate
+                      size={25}
+                      color={item.user ? "#7DBDC9" : "#BACCCF"}
+                    />
                   </button>
                 </Col>
               </Article>
@@ -266,19 +279,18 @@ export default function BalanceAdjust() {
           </ul>
         </Container>
       ) : null}
-      <br />
       <Paginate style={confirm ? { filter: "blur(5px)" } : {}}>
         {loading ? null : show ? (
           <>
             <button
-              style={pages === 1 ? { cursor: "not-allowed" } : {}}
+              style={pages === 1 ? { pointerEvents: "none" } : {}}
               onClick={confirm ? null : prevPage}
             >
               Anterior
             </button>
             <Page>{`${pages}/${lastPage}`}</Page>
             <button
-              style={pages === lastPage ? { cursor: "not-allowed" } : {}}
+              style={pages === lastPage ? { pointerEvents: "none" } : {}}
               onClick={confirm ? null : nextPage}
             >
               Próxima
@@ -299,7 +311,7 @@ export default function BalanceAdjust() {
                 textAlign: "center",
                 maxWidth: "400px",
                 borderRadius: "8px",
-                boxShadow: "8px 8px 10px #555",
+                boxShadow: "9px 9px 10px #333",
                 zIndex: 9999
               }
             : { display: "none" }
@@ -311,19 +323,35 @@ export default function BalanceAdjust() {
           </LoaderDivDialog>
         ) : (
           <>
-            <strong
+            <div
               style={{
-                display: "flex",
-                marginTop: "15px",
-                justifyContent: "center",
-                fontSize: "23px",
-                color: "#222"
+                background: "rgba(0, 0, 0, 0.7)",
+                borderRadius: "4px",
+                padding: "5px 0",
+                margin: "10px 10px"
               }}
             >
-              Alterar saldo?
-            </strong>
-            <p style={{ marginTop: "25px" }}>{client}</p>
-            <p style={{ marginTop: "10px", fontWeight: "bold" }}>
+              <strong
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  fontSize: "23px",
+                  color: "#eee"
+                }}
+              >
+                Alterar limite
+              </strong>
+            </div>
+            <p style={{ margin: "25px 0 0 75px", textAlign: "left" }}>
+              {client}
+            </p>
+            <p
+              style={{
+                margin: "10px 0 0 75px",
+                fontWeight: "bold",
+                textAlign: "left"
+              }}
+            >
               Saldo atual: {balance}
             </p>
             <div
@@ -383,7 +411,10 @@ export default function BalanceAdjust() {
               style={{
                 display: "flex",
                 justifyContent: "space-evenly",
-                marginTop: "15px"
+                background: "rgba(0, 0, 0, 0.2)",
+                padding: "5px 0",
+                margin: "10px 10px 10px 10px",
+                borderRadius: "4px"
               }}
             >
               <button

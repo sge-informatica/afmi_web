@@ -9,6 +9,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 30px;
+    text-align: center;
 
     input {
       background: rgba(0, 0, 0, 0.3);
@@ -22,6 +23,14 @@ export const Container = styled.div`
       &::placeholder {
         color: rgba(255, 255, 255, 1);
       }
+    }
+
+    span {
+      align-items: center;
+      justify-content: center;
+      color: #f64c75;
+      margin: 3px 0 0 10px;
+      font-weight: bold;
     }
 
     hr {

@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import api from "../../services/api";
-import Footer from "../../components/Footer";
-import {
-  Wrapper,
-  LoaderDiv,
-  Article,
-  TransactionType,
-  Paginate,
-  Page
-} from "./styles";
-import { formatDateHour } from "../../_util/formatDate";
+import { Redirect } from "react-router-dom";
 import { Container, Row, Col } from "react-grid-system";
+import api from "../../services/api";
+import { maskResponseValue } from "../../_util/masks";
+import { Wrapper, Article, LoaderDiv, Paginate, Page } from "./styles";
+import { MdChevronLeft } from "react-icons/md";
 import emoji from "../../assets/sad-emoji.png";
-import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
+import Loader from "react-loader-spinner";
+import Footer from "../../components/Footer";
 
-export default function Transactions() {
+export default function InvoiceDetails(props) {
+  const token = useSelector(state => state.auth.token);
+  const admin = useSelector(state => state.user.profile.profile.admin);
+  const [id, setId] = useState("");
+  const [title, setTitle] = useState("");
+  const [data, setData] = useState([]);
   let [pages, setPages] = useState(1);
   const [lastPage, setLastPage] = useState(1);
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const id = useSelector(state => state.user.profile.id);
-  const token = useSelector(state => state.auth.token);
 
   useEffect(() => {
-    async function loadTransactions() {
+    async function loadInvoiceDetails() {
+      setTitle(props.history.location.state.title);
+      setId(props.history.location.state.id);
+      if (id === "" || title === "") return;
       try {
         setLoading(true);
-        const response = await api.get(`transactions/${id}`, {
+        const response = await api.get(`/invoices/${id}?page4=${pages}`, {
           params: { token }
         });
         setData(response.data.data);
@@ -36,19 +36,20 @@ export default function Transactions() {
         setLastPage(response.data.lastPage);
         setLoading(false);
       } catch (err) {
-        setLoading(false);
         toast.error("Sessão inválida, faça login na aplicação novamente. 🙁");
+        setLoading(false);
       }
     }
-    loadTransactions();
-  }, [id, token]);
+
+    loadInvoiceDetails();
+  }, [id, pages, props, props.history.location.state, title, token]);
 
   async function nextPage() {
     if (pages === lastPage) return;
     setLoading(true);
     pages += 1;
     try {
-      const response = await api.get(`transactions/${id}?page=${pages}`, {
+      const response = await api.get(`invoices/${id}?page=${pages}`, {
         params: { token }
       });
       setData(response.data.data);
@@ -65,7 +66,7 @@ export default function Transactions() {
     setLoading(true);
     pages -= 1;
     try {
-      const response = await api.get(`transactions/${id}?page=${pages}`, {
+      const response = await api.get(`invoices/${id}?page=${pages}`, {
         params: { token }
       });
       setData(response.data.data);
@@ -79,18 +80,24 @@ export default function Transactions() {
 
   return (
     <Wrapper>
+      {admin ? null : <Redirect to="/dashboard" />}
       <Container
         fluid
         style={{
           lineHeight: "40px",
-          margin: "40px 180px 0 180px",
+          margin: "40px 300px 0 300px",
           textAlign: "center",
           color: "#000"
         }}
       >
         {loading ? null : data.length === 0 ? null : (
           <>
-            <h2>Consultar compras</h2>
+            <header>
+              <button onClick={() => props.history.goBack()}>
+                <MdChevronLeft size={25} color="#595959" />
+              </button>
+              <h2>{title}</h2>
+            </header>
             <Row
               style={{
                 background: "rgba(0, 0, 0, 0.6)",
@@ -98,12 +105,10 @@ export default function Transactions() {
                 fontSize: "15px"
               }}
             >
-              <Col style={{ borderRight: "1px solid #fff" }}>NOME</Col>
-              <Col style={{ borderRight: "1px solid #fff" }}>DATA</Col>
-              <Col style={{ borderRight: "1px solid #fff" }}>VALOR</Col>
               <Col style={{ borderRight: "1px solid #fff" }}>HISTÓRICO</Col>
-              <Col style={{ borderRight: "1px solid #fff" }}>SALDO</Col>
-              <Col>CANCELADO</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>NOME COMPLETO</Col>
+              <Col style={{ borderRight: "1px solid #fff" }}>EMAIL</Col>
+              <Col>VALOR</Col>
             </Row>
           </>
         )}
@@ -113,54 +118,23 @@ export default function Transactions() {
           </LoaderDiv>
         ) : data.length === 0 ? (
           <strong>
-            Nenhuma compra foi realizada.
+            Nenhuma fatura foi fechada.
             <img src={emoji} alt="sad-emoji" width={25} />
           </strong>
         ) : (
           <ul>
             {data.map(item => (
               <Article key={item.id}>
-                <Col
-                  style={{
-                    borderRight: "1px solid #aaa",
-                    fontSize: "13px"
-                  }}
-                >
-                  {item.provider_name}
+                <Col style={{ borderRight: "1px solid #aaa" }}>
+                  {item.historico}
                 </Col>
-                <Col
-                  style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
-                >
-                  {formatDateHour(item.created_at)}
+                <Col style={{ borderRight: "1px solid #aaa" }}>
+                  {item.username}
                 </Col>
-                <Col
-                  style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
-                >
-                  Valor: R${item.valor}
-                  <TransactionType>{item.DC}</TransactionType>
+                <Col style={{ borderRight: "1px solid #aaa" }}>
+                  {item.email}
                 </Col>
-                <Col
-                  style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
-                >
-                  {item.historico ? item.historico : null}
-                </Col>
-                <Col
-                  style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
-                >
-                  Saldo: R${item.saldo}
-                </Col>
-                <Col
-                  style={
-                    item.canceled
-                      ? {
-                          fontSize: "13px",
-                          color: "#952A2A"
-                        }
-                      : { fontSize: "13px" }
-                  }
-                >
-                  {item.canceled ? "Sim" : "Não"}
-                </Col>
+                <Col>{maskResponseValue(item.valor)}</Col>
               </Article>
             ))}
           </ul>

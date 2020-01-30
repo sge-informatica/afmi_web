@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Form, Input } from "@rocketseat/unform";
 import * as Yup from "yup";
@@ -17,6 +18,7 @@ const schema = Yup.object().shape({
 
 export default function NewProfile() {
   const token = useSelector(state => state.auth.token);
+  const admin = useSelector(state => state.user.profile.profile.admin);
   const [check, setCheck] = useState(false);
   const [doc, setDoc] = useState("");
   const [date, setDate] = useState("");
@@ -68,6 +70,7 @@ export default function NewProfile() {
 
   return (
     <Wrapper>
+      {!admin ? <Redirect to="/dashboard" /> : null}
       <Container>
         <h2>Incluir novo perfil</h2>
         <Form schema={schema} onSubmit={handleSubmit}>

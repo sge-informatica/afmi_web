@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Form, Input } from "@rocketseat/unform";
@@ -11,7 +11,12 @@ export default function SignUp() {
   const loading = useSelector(state => state.auth.loading);
   const [doc, setDoc] = useState("");
   const [date, setDate] = useState("");
+  const [load, setLoad] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setLoad(false);
+  }, []);
 
   function handleSubmit({
     username,
@@ -22,6 +27,8 @@ export default function SignUp() {
     password,
     password_confirmation
   }) {
+    setLoad(loading);
+
     cnpj_cpf = cnpj_cpf
       .replace(/\D/g, "")
       .replace(/(\d{3})(\d{1,2})/, "$1$2")
@@ -79,7 +86,7 @@ export default function SignUp() {
           placeholder="Confirmação de senha"
         />
         <button type="submit">
-          {loading ? (
+          {load ? (
             <Loader type="Oval" color="#FFF" width={30} height={30} />
           ) : (
             "Criar conta"

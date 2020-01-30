@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Form, Input } from "@rocketseat/unform";
 import { Container, LoaderDiv } from "./styles";
@@ -17,6 +18,8 @@ import { toast } from "react-toastify";
 
 export default function Sell() {
   const token = useSelector(state => state.auth.token);
+  const admin = useSelector(state => state.user.profile.profile.admin);
+  const provider = useSelector(state => state.user.profile.profile.provider);
   const [doc, setDoc] = useState("");
   const [value, setValue] = useState("");
   const [users, setUsers] = useState([]);
@@ -74,6 +77,7 @@ export default function Sell() {
 
   return (
     <Container>
+      {admin || provider ? null : <Redirect to="/dashboard" />}
       <h2>Vender</h2>
       <Form onSubmit={handleSearch}>
         <header>
@@ -117,7 +121,7 @@ export default function Sell() {
                 <header>
                   <button onClick={() => handleCancel()}>
                     <MdCancel
-                      color="#fff"
+                      color="#CB9F9F"
                       size={50}
                       style={{ paddingBottom: "5px" }}
                     />
@@ -125,7 +129,7 @@ export default function Sell() {
                   </button>
                   <button type="submit" onClick={() => handleSubmit(value)}>
                     <MdCheckCircle
-                      color="#fff"
+                      color="#9FC4CB"
                       size={50}
                       style={{ paddingBottom: "5px" }}
                     />

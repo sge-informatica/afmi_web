@@ -24,13 +24,13 @@ export const Container = styled.div`
         width: 250px;
         background: #595959;
         font-weight: bold;
-        border-width: 1px;
+        border: 2px solid #eee;
         border-radius: 30px;
         transition: 0.2s;
         color: #fff;
 
         &:hover {
-          background: ${darken(0.03, "#595959")};
+          background: ${darken(0.03, "#505850")};
           transform: scale(1.05, 1.05);
         }
 

@@ -5,11 +5,12 @@ import Footer from "../../components/Footer";
 import {
   MdShoppingBasket,
   MdAssignment,
-  MdShoppingCart,
+  MdAddShoppingCart,
   MdPersonAdd,
   MdAttachMoney,
   MdMoneyOff,
-  MdAddToQueue
+  MdAddToQueue,
+  MdChromeReaderMode
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 
@@ -26,7 +27,7 @@ export default function Dashboard() {
           </Link>
           {profile.provider || profile.admin ? (
             <Link to="/show-sales">
-              <MdShoppingCart size={40} color="#fff" />
+              <MdAddShoppingCart size={40} color="#fff" />
               <strong>Consultar vendas</strong>
             </Link>
           ) : null}
@@ -46,6 +47,12 @@ export default function Dashboard() {
             <Link to="new-admin">
               <MdAddToQueue size={40} color="#fff" />
               <strong>Eleger/Remover administrador</strong>
+            </Link>
+          ) : null}
+          {profile.admin ? (
+            <Link to="/invoices">
+              <MdChromeReaderMode size={40} color="#fff" />
+              <strong>Consultar faturas fechadas</strong>
             </Link>
           ) : null}
           {profile.admin ? (

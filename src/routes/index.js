@@ -13,6 +13,8 @@ import ShowSale from "../pages/ShowSale";
 import NewAdmin from "../pages/NewAdmin";
 import NewProfile from "../pages/NewProfile";
 import BalanceAdjust from "../pages/BalanceAdjust";
+import Invoices from "../pages/Invoices";
+import InvoiceDetails from "../pages/InvoiceDetails";
 
 export default function Routes() {
   return (
@@ -29,6 +31,8 @@ export default function Routes() {
       <Route path="/add-profile" component={NewProfile} isPrivate />
       <Route path="/new-admin" component={NewAdmin} isPrivate />
       <Route path="/balance-adjustment" component={BalanceAdjust} isPrivate />
+      <Route path="/invoices" component={Invoices} isPrivate />
+      <Route path="/invoice-details" component={InvoiceDetails} isPrivate />
     </Switch>
   );
 }

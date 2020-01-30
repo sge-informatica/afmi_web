@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Form, Input } from "@rocketseat/unform";
 import api from "../../services/api";
@@ -15,6 +16,8 @@ import {
 
 export default function UpdateTransactions() {
   const token = useSelector(state => state.auth.token);
+  const iD = useSelector(state => state.user.profile.profile.id);
+  const admin = useSelector(state => state.user.profile.profile.admin);
   const [doc, setDoc] = useState("");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,7 +33,7 @@ export default function UpdateTransactions() {
       setUsers([response.data]);
       setLoading(false);
     } catch (err) {
-      toast.error(`${err.response.data.error.message}. 🙁`);
+      toast.error(`${err.response.data.error.message} 🙁`);
       setLoading(false);
       setDoc("");
       setUsers([]);
@@ -51,6 +54,10 @@ export default function UpdateTransactions() {
   }
 
   async function handleCancel(id) {
+    if (id === iD) {
+      toast.error("Você não pode remover seus próprios direitos.");
+      return;
+    }
     try {
       const response = await api.put(`/profiles/${id}`, {
         token,
@@ -67,6 +74,7 @@ export default function UpdateTransactions() {
 
   return (
     <Container>
+      {!admin ? <Redirect to="/dashboard" /> : null}
       <h2>Eleger administrador</h2>
       <Form onSubmit={handleSearch}>
         <header>
@@ -98,7 +106,7 @@ export default function UpdateTransactions() {
                 <header>
                   <button onClick={() => handleCancel(item.id)}>
                     <MdRemoveCircle
-                      color="#fff"
+                      color="#CB9F9F"
                       size={50}
                       style={{ paddingBottom: "5px" }}
                     />
@@ -106,7 +114,7 @@ export default function UpdateTransactions() {
                   </button>
                   <button type="submit" onClick={() => handleSubmit(item.id)}>
                     <MdCheckCircle
-                      color="#fff"
+                      color="#9FC4CB"
                       size={50}
                       style={{ paddingBottom: "5px" }}
                     />
