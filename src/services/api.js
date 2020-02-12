@@ -6,7 +6,7 @@ const api = axios.create({
 
 export const redirect_url = () =>
   process.env.NODE_ENV === "development"
-    ? "https://afmi-convenios.netlify.com/recover-password"
-    : "https://api.sgeinformatica.com.br/afmi/passwords";
+    ? "http://localhost:3000/recover-password"
+    : "https://afmi-convenios.netlify.com/recover-password";
 
 export default api;
