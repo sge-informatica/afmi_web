@@ -21,7 +21,10 @@ export default function RecoverPassword() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setToken(window.location.href.substring(45, 65));
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    const t1 = params.get("token");
+    setToken(t1);
     window.history.replaceState({}, document.title, `/recover-password`);
   }, []);
 
