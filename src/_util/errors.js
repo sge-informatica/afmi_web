@@ -17,8 +17,8 @@ export function checkSignUp(err) {
 
 export function checkUpdateProfile(err) {
   err instanceof Array
-    ? err.map(msg => toast.error(msg.message))
-    : toast.error(`${err.error.message}`);
+    ? err.map(msg => toast.error(`${msg.message} 🙁`))
+    : toast.error(`${err.error.message} 🙁`);
 }
 
 export function recoverPassword(err) {

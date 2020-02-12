@@ -10,6 +10,7 @@ import {
   Paginate,
   Page
 } from "./styles";
+import { maskResponseValue } from "../../_util/masks";
 import { formatDateHour } from "../../_util/formatDate";
 import { Container, Row, Col } from "react-grid-system";
 import emoji from "../../assets/sad-emoji.png";
@@ -136,7 +137,7 @@ export default function Transactions() {
                 <Col
                   style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
                 >
-                  Valor: R${item.valor}
+                  {maskResponseValue(item.valor)}
                   <TransactionType>{item.DC}</TransactionType>
                 </Col>
                 <Col
@@ -147,7 +148,7 @@ export default function Transactions() {
                 <Col
                   style={{ borderRight: "1px solid #aaa", fontSize: "13px" }}
                 >
-                  Saldo: R${item.saldo}
+                  {maskResponseValue(item.saldo)}
                 </Col>
                 <Col
                   style={

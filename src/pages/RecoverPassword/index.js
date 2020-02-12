@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input } from "@rocketseat/unform";
 import { Link, Redirect } from "react-router-dom";
 import logo from "../../assets/logo.png";
@@ -9,7 +9,6 @@ import Loader from "react-loader-spinner";
 import { recoverPassword } from "../../_util/errors";
 
 const schema = Yup.object().shape({
-  token: Yup.string().required("O código é obrigatório."),
   password: Yup.string().required("A senha é obrigatória."),
   password_confirmation: Yup.string().required(
     "A confirmação de senha é obrigatória."
@@ -17,10 +16,16 @@ const schema = Yup.object().shape({
 });
 
 export default function RecoverPassword() {
+  const [token, setToken] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit({ token, password, password_confirmation }) {
+  useEffect(() => {
+    setToken(window.location.href.substring(45, 65));
+    window.history.replaceState({}, document.title, `/recover-password`);
+  }, []);
+
+  async function handleSubmit({ password, password_confirmation }) {
     setLoading(true);
     try {
       const response = await api.put("/passwords", {
@@ -43,7 +48,6 @@ export default function RecoverPassword() {
       {redirect ? <Redirect to="/" /> : null}
       <img src={logo} alt="SgeApp" />
       <Form schema={schema} onSubmit={handleSubmit}>
-        <Input name="token" placeholder="Digite o código enviado no e-mail" />
         <Input name="password" type="password" placeholder="Sua senha" />
         <Input
           name="password_confirmation"

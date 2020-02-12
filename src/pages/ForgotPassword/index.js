@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Form, Input } from "@rocketseat/unform";
 import logo from "../../assets/logo.png";
 import * as Yup from "yup";
@@ -15,7 +15,6 @@ const schema = Yup.object().shape({
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit({ email }) {
@@ -23,13 +22,12 @@ export default function ForgotPassword() {
     try {
       await api.post("/passwords", {
         email,
-        redirect_url
+        redirect_url: redirect_url().toString()
       });
       toast.success(
         `Código de alteração de senha foi enviado para ${email}. 😁`
       );
       setLoading(false);
-      setRedirect(true);
       setEmail("");
     } catch (err) {
       err.response.data.map(item => toast.error(item.message));
@@ -40,7 +38,6 @@ export default function ForgotPassword() {
 
   return (
     <>
-      {redirect ? <Redirect to="/recover-password" /> : null}
       <img src={logo} alt="SgeApp" />
       <Form schema={schema} onSubmit={handleSubmit}>
         <Input

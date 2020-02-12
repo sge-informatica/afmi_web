@@ -10,7 +10,8 @@ import {
   MdAttachMoney,
   MdMoneyOff,
   MdAddToQueue,
-  MdChromeReaderMode
+  MdChromeReaderMode,
+  MdEventAvailable
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 
@@ -60,6 +61,12 @@ export default function Dashboard() {
               <MdMoneyOff size={40} color="#fff" />
               <MdAttachMoney size={40} color="#fff" />
               <strong>Ajuste de saldo</strong>
+            </Link>
+          ) : null}
+          {profile.admin ? (
+            <Link to="/invoice-close">
+              <MdEventAvailable size={40} color="#fff" />
+              <strong>Fechar faturas</strong>
             </Link>
           ) : null}
         </ul>
